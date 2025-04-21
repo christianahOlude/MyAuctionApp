@@ -1,4 +1,8 @@
 package org.example.services.itemServices;
 
-public class ItemService {
+import org.example.data.models.Item;
+import org.example.data.repositories.ItemRepository;
+
+public interface ItemService {
+
 }

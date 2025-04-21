@@ -1,4 +1,7 @@
 package org.example.data.repositories;
 
-public class ItemRepository {
+import org.example.data.models.Item;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ItemRepository extends MongoRepository<Item, String> {
 }
