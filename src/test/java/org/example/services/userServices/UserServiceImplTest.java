@@ -1,14 +1,20 @@
 package org.example.services.userServices;
 
+import org.example.data.models.Item;
+import org.example.data.models.User;
 import org.example.data.repositories.UserRepository;
+import org.example.dtos.request.ItemRegistrationRequest;
 import org.example.dtos.request.UserLoginRequest;
 import org.example.dtos.request.UserRegistrationRequest;
+import org.example.dtos.response.ItemRegistrationResponse;
 import org.example.dtos.response.UserLoginResponse;
 import org.example.dtos.response.UserRegistrationResponse;
 import org.example.exceptions.InvalidInput;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -86,6 +92,15 @@ class UserServiceImplTest {
 
     @Test
     void registerItem(){
-
+        User user = new User();
+        LocalTime time = new LocalTime();
+        ItemRegistrationRequest itemRegistrationRequest = new ItemRegistrationRequest();
+        itemRegistrationRequest.setTitle("Gold Sword");
+        itemRegistrationRequest.setDescription("A gold sword used by one of the heroes");
+        itemRegistrationRequest.setAuctionOwner(user);
+        itemRegistrationRequest.setStartingBid(1000000000.00);
+        itemRegistrationRequest.setAuctionStartTime(time);
+        itemRegistrationRequest.setAuctionEndTime(time);
+        assertNotNull(itemRegistrationRequest);
     }
 }
