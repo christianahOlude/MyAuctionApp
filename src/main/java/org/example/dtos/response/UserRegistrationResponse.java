@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRegistrationResponse {
-    @Id
-    private String id;
-    private String userName;
+    private Object data;
     private String message;
 }

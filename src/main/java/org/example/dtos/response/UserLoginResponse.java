@@ -7,10 +7,7 @@ import org.springframework.data.annotation.Id;
 @Setter
 @Getter
 public class UserLoginResponse {
-    @Id
-    public String id;
-    public String userName;
+    public Object data;
     public String message;
-
 
 }

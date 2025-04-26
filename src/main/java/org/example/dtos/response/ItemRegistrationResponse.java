@@ -14,13 +14,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
-@Document
-@AllArgsConstructor
 public class ItemRegistrationResponse {
-    @Id
-    private String id;
-    private String title;
-    private LocalTime auctionStartTime;
-    private LocalTime auctionEndTime;
+//    private String title;
+//
+//    private LocalDateTime auctionStartDate;
+//    private LocalDateTime auctionStartTime;
+//    private LocalDateTime auctionEndTime;
+//    private double startingBid;
+    private String message;
+    private boolean status;
+    private Object data;
 
 }

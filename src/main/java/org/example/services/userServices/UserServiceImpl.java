@@ -6,82 +6,42 @@ import org.example.dtos.request.UserLoginRequest;
 import org.example.dtos.request.UserRegistrationRequest;
 import org.example.dtos.response.UserLoginResponse;
 import org.example.dtos.response.UserRegistrationResponse;
+import org.example.exceptions.EmailAlreadyExistException;
 import org.example.exceptions.InvalidInput;
+import org.example.utils.userMapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
-public class UserServiceImpl{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
 
+    @Override
     public UserRegistrationResponse registerUser(UserRegistrationRequest userRegistrationRequest) {
-        var userOptional = userRepository.findByEmailAddress(userRegistrationRequest.getEmailAddress());
-        if (userOptional.isPresent()) {
-            throw new InvalidInput("Email address already in use");
+        boolean isEmailExist = userRepository.existsUserByEmailAddress(userRegistrationRequest.getEmailAddress());
+        if (isEmailExist) {
+            throw new EmailAlreadyExistException(userRegistrationRequest.getEmailAddress() + "already exist");
         }
-        User user = new User();
 
-        user.setUserName(userRegistrationRequest.getUserName());
-        user.setPassword(userRegistrationRequest.getPassword());
-        user.setEmailAddress(userRegistrationRequest.getEmailAddress());
-        User savedUser = userRepository.save(user);
-
-        return new UserRegistrationResponse(
-                savedUser.getId(), savedUser.getUserName(),"has registered successfully"
-            );
+        User newUser = UserMapper.mapUserToRegisterRequest(userRegistrationRequest);
+        userRepository.save(newUser);
+        return UserMapper.mapRegisterToResponse(newUser);
     }
 
-    public UserLoginResponse loginUser(String emailAddress, String password) {
-        UserLoginResponse userLoginResponse = new UserLoginResponse();
-        var userOptional = userRepository.findByEmailAddress(emailAddress);
+    @Override
+    public UserLoginResponse loginUser(UserLoginRequest userLoginRequest) {
+        User foundUser = userRepository.findByEmailAddress(userLoginRequest.getEmailAddress())
+                .orElseThrow(() -> new InvalidInput("Email address not found"));
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if (user.getEmailAddress().equals(emailAddress)) {
-                if (user.getPassword().equals(password))
-                    userLoginResponse.setId(user.getId());
-                userLoginResponse.setUserName(user.getUserName());
-                         userLoginResponse.setMessage("is logged in successfully");
-            }
-        }else{
-            throw new InvalidInput("Invalid email address");
+        boolean correctPassword = foundUser.getPassword().equals(userLoginRequest.getPassword());
+        if (!correctPassword) {
+            throw new InvalidInput("Incorrect password");
         }
-        return userLoginResponse;
-
-
-//
-//        try {
-//            validateEmail(emailAddress);
-//        } catch (InvalidInput e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
-//
-//        try {
-//            validatePassword(password);
-//        } catch (InvalidInput e) {
-//            System.out.println("Error: " + e.getMessage());
-//        }
-
-
-
+        return UserMapper.mapLoginRequestToResponse(foundUser);
     }
-    public void validateEmail(String emailAddress){
-        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest();
-        if(emailAddress.isEmpty() || !emailAddress.equals(userRegistrationRequest)) throw new InvalidInput(emailAddress);
-    }
-    public void validatePassword(String password){
-        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest();
-        if (password.isEmpty() || !password.equals(userRegistrationRequest))throw new InvalidInput(password);
-    }
-
-
-
-
 }
 
 

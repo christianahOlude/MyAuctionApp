@@ -9,5 +9,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     UserRegistrationResponse registerUser(UserRegistrationRequest userRegistrationRequest);
-    UserLoginResponse loginUser(UserRegistrationRequest userLoginRequest);
+    UserLoginResponse loginUser(UserLoginRequest userLoginRequest);
 }

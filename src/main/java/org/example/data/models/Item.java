@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 @Document
@@ -18,8 +17,9 @@ public class Item {
     private String id;
     private String title;
     private String description;
-    private LocalTime auctionStartTime;
-    private LocalTime auctionEndTime;
+    private LocalDateTime auctionStartTime;
+    private LocalDateTime auctionEndTime;
+    private LocalDateTime auctionStartDate;
     @DBRef
     private User auctionOwner;
     private double startingBid;
