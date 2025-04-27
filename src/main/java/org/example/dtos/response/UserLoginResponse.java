@@ -1,13 +1,14 @@
 package org.example.dtos.response;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
-@Setter
-@Getter
+@Data
 public class UserLoginResponse {
-    public Object data;
-    public String message;
+    private Object data;
+    private String userId;
+    private String message;
 
 }

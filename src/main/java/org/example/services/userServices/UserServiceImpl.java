@@ -7,6 +7,8 @@ import org.example.dtos.request.UserRegistrationRequest;
 import org.example.dtos.response.UserLoginResponse;
 import org.example.dtos.response.UserRegistrationResponse;
 import org.example.exceptions.EmailAlreadyExistException;
+import org.example.exceptions.EmailNotFoundException;
+import org.example.exceptions.IncorrestPasswordException;
 import org.example.exceptions.InvalidInput;
 import org.example.utils.userMapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +36,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserLoginResponse loginUser(UserLoginRequest userLoginRequest) {
         User foundUser = userRepository.findByEmailAddress(userLoginRequest.getEmailAddress())
-                .orElseThrow(() -> new InvalidInput("Email address not found"));
+                .orElseThrow(() -> new EmailNotFoundException("Email address not found"));
 
         boolean correctPassword = foundUser.getPassword().equals(userLoginRequest.getPassword());
         if (!correctPassword) {
-            throw new InvalidInput("Incorrect password");
+            throw new IncorrestPasswordException("Incorrect password");
         }
         return UserMapper.mapLoginRequestToResponse(foundUser);
     }
 }
-
-

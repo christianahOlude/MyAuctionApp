@@ -23,6 +23,8 @@ public class ItemRegistrationResponse {
 //    private double startingBid;
     private String message;
     private boolean status;
-    private Object data;
+    private String data;
+    private String itemId;
+
 
 }

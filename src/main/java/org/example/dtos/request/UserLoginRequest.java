@@ -1,10 +1,10 @@
 package org.example.dtos.request;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Data
 public class UserLoginRequest {
     private String emailAddress;
     private String password;

@@ -20,13 +20,14 @@ public class UserMapper {
         UserRegistrationResponse userRegistrationResponse = new UserRegistrationResponse();
         userRegistrationResponse.setMessage("Registration Successful");
         userRegistrationResponse.setData(newUser.getEmailAddress());
+        userRegistrationResponse.setUserId(newUser.getId());
         return userRegistrationResponse;
     }
-
 
     public static UserLoginResponse mapLoginRequestToResponse(User user) {
         UserLoginResponse loginResponse = new UserLoginResponse();
         loginResponse.setMessage("Login Successful");
+        loginResponse.setUserId(user.getId());
         loginResponse.setData(user.getEmailAddress());
         return loginResponse;
     }
