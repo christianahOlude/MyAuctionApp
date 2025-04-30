@@ -1,7 +1,6 @@
 package org.example.utils.userMapper;
 
 import org.example.data.models.User;
-import org.example.dtos.request.UserLoginRequest;
 import org.example.dtos.request.UserRegistrationRequest;
 import org.example.dtos.response.UserLoginResponse;
 import org.example.dtos.response.UserRegistrationResponse;

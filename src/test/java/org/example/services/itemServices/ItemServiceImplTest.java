@@ -49,9 +49,7 @@ class ItemServiceImplTest {
         itemRegistrationRequest.setDescription("Car");
         itemRegistrationRequest.setEmail("christ1@gmail.comchrist1@gmail.com");
         itemRegistrationRequest.setAuctionStartDate(LocalDate.now());
-        itemRegistrationRequest.setAuctionStartTime(LocalTime.now());
-        itemRegistrationRequest.setAuctionEndTime(LocalTime.now());
-        itemRegistrationRequest.setBiddingPrice(1_000_000.00);
+        itemRegistrationRequest.setStartingBid(1_000_000.00);
 
         ItemRegistrationResponse itemRegistrationResponse = itemService.createItem(itemRegistrationRequest);
         assertThat(itemRegistrationResponse.getMessage()).isEqualTo("Item Added Successfully");

@@ -4,6 +4,7 @@ import org.example.data.models.Item;
 import org.example.data.models.User;
 import org.example.data.repositories.ItemRepository;
 import org.example.data.repositories.UserRepository;
+import org.example.dtos.request.DeleteItemRequest;
 import org.example.dtos.request.ItemRegistrationRequest;
 import org.example.dtos.request.UpdateItemRequest;
 import org.example.dtos.response.ItemRegistrationResponse;
@@ -39,30 +40,39 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.mapItemToResponse(newItem);
     }
 
+
     @Override
     public List<Item> getAllItems(){
         return itemRepository.findAll();
     }
 
     @Override
-    public UpdateItemResponse updateItem(UpdateItemRequest updateItemRequest) {
-        Item foundItem = itemRepository.findItemByTitle(updateItemRequest.getTitle())
+    public UpdateItemResponse updateItem(String itemId, UpdateItemRequest updateItemRequest) {
+        Item foundItem = itemRepository.findItemById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Item not found"));
 
         foundItem.setTitle(updateItemRequest.getTitle());
         foundItem.setDescription(updateItemRequest.getDescription());
-        foundItem.setBiddingPrice(updateItemRequest.getBiddingPrice());
-        Item updatedItem = ItemMapper.mapUpdateItemRequestToItem(updateItemRequest);
+        foundItem.setStartingBid(updateItemRequest.getBiddingPrice());
         itemRepository.save(foundItem);
-        return new UpdateItemResponse();
+        return ItemMapper.mapUpdateItemToResponse(foundItem);
     }
-
-
 
     @Override
-    public Item findById(String id) {
-        return itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Item not found"));
-    }
+    public void deleteItem(DeleteItemRequest deleteItemRequest) {
+        User foundUser = userRepository.findUserById(deleteItemRequest.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found, kindly register"));
 
+        Item itemToBeDeleted = itemRepository.findItemById(deleteItemRequest.getItemId())
+                .orElseThrow(() -> new ItemNotFoundException("Item not found"));
+
+        itemRepository.delete(itemToBeDeleted);
+
+        foundUser.getItems().remove(itemToBeDeleted);
+        userRepository.save(foundUser);
+
+        ItemMapper.mapDeleteItemToResponse(itemToBeDeleted);
+
+    }
 
 }

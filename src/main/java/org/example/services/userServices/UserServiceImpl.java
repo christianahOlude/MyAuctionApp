@@ -44,4 +44,5 @@ public class UserServiceImpl implements UserService {
         }
         return UserMapper.mapLoginRequestToResponse(foundUser);
     }
+
 }
