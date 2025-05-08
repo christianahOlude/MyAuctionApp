@@ -9,6 +9,7 @@ import org.example.dtos.request.ItemRegistrationRequest;
 import org.example.dtos.request.UpdateItemRequest;
 import org.example.dtos.response.ItemRegistrationResponse;
 import org.example.dtos.response.UpdateItemResponse;
+import org.example.exceptions.InvalidAmountException;
 import org.example.exceptions.ItemNotFoundException;
 import org.example.exceptions.UserNotFoundException;
 import org.example.utils.itemMapper.ItemMapper;
@@ -34,6 +35,9 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new UserNotFoundException("User not found, kindly register"));
 
         Item newItem = ItemMapper.mapRequestToItem(itemRegistrationRequest);
+        if(newItem.getStartingBid() == 0) {
+            throw new InvalidAmountException("Amount can't be 0");
+        }
         itemRepository.save(newItem);
         foundUser.getItems().add(newItem);
         userRepository.save(foundUser);
@@ -72,7 +76,6 @@ public class ItemServiceImpl implements ItemService {
         userRepository.save(foundUser);
 
         ItemMapper.mapDeleteItemToResponse(itemToBeDeleted);
-
     }
 
 }

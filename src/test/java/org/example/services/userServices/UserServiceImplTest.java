@@ -4,6 +4,7 @@ import org.example.data.repositories.UserRepository;
 import org.example.dtos.request.*;
 import org.example.dtos.response.*;
 import org.example.exceptions.EmailAlreadyExistException;
+import org.example.exceptions.InvalidAmountException;
 import org.example.services.itemServices.ItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -221,4 +222,33 @@ class UserServiceImplTest {
         assertEquals(1, itemRepository.count());
         assertNotNull(itemService.getAllItems());
     }
+
+    @Test
+    public void throwExceptionForInvalidAmount(){
+        UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest();
+        userRegistrationRequest.setUserName("Christy");
+        userRegistrationRequest.setPassword("Password");
+        userRegistrationRequest.setEmailAddress("christy@gmail.com");
+        UserRegistrationResponse response = userService.registerUser(userRegistrationRequest);
+        String expected = userRegistrationRequest.getEmailAddress();
+        assertEquals(expected, response.getData());
+        assertEquals("Registration Successful", response.getMessage());
+
+        ItemRegistrationRequest itemRegistrationRequest = new ItemRegistrationRequest();
+        itemRegistrationRequest.setTitle("Toyota camry");
+        itemRegistrationRequest.setDescription("Car");
+        itemRegistrationRequest.setEmail("christy@gmail.com");
+        itemRegistrationRequest.setAuctionStartDate(LocalDate.now());
+        itemRegistrationRequest.setStartingBid(1_000_000.00);
+        itemService.createItem(itemRegistrationRequest);
+
+        itemRegistrationRequest.setStartingBid(0);
+
+        InvalidAmountException exception = assertThrows(InvalidAmountException.class, () -> {
+            itemService.createItem(itemRegistrationRequest);
+        });
+        assertEquals("Amount can't be 0", exception.getMessage());
+    }
+
 }
+

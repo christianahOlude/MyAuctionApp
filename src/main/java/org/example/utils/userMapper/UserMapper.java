@@ -4,13 +4,16 @@ import org.example.data.models.User;
 import org.example.dtos.request.UserRegistrationRequest;
 import org.example.dtos.response.UserLoginResponse;
 import org.example.dtos.response.UserRegistrationResponse;
+import org.example.services.PasswordHash;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UserMapper {
 
     public static User mapUserToRegisterRequest(UserRegistrationRequest userRegistrationRequest) {
         User user = new User();
         user.setUserName(userRegistrationRequest.getUserName());
-        user.setPassword(userRegistrationRequest.getPassword());
+        String hashedPassword = PasswordHash.hashPassword(userRegistrationRequest.getPassword());
+        user.setPassword(hashedPassword);
         user.setEmailAddress(userRegistrationRequest.getEmailAddress());
         return user;
     }

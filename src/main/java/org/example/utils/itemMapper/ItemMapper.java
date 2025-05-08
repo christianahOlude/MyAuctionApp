@@ -2,9 +2,11 @@ package org.example.utils.itemMapper;
 
 import org.example.data.models.Item;
 import org.example.dtos.request.ItemRegistrationRequest;
+import org.example.dtos.request.PlaceBidRequest;
 import org.example.dtos.request.UpdateItemRequest;
 import org.example.dtos.response.DeleteItemResponse;
 import org.example.dtos.response.ItemRegistrationResponse;
+import org.example.dtos.response.PlaceBidResponse;
 import org.example.dtos.response.UpdateItemResponse;
 
 public class ItemMapper {
@@ -50,4 +52,7 @@ public class ItemMapper {
         deleteItemResponse.setMessage("deleted successfully");
         return deleteItemResponse;
     }
+//    public static PlaceBidResponse mapBiddedItemToResponse(PlaceBidRequest placeBidRequest){
+//
+//    }
 }
